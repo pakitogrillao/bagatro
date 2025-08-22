@@ -3,19 +3,25 @@
 -- lua is not a serious language and i hate it
 local mod = SMODS.current_mod
 
-SMODS.Atlas { key = "Joker", path = "Jokers.png", px = 71, py = 95, prefix_config = { key = false } }
-SMODS.Atlas { key = "Tarot", path = "Tarots.png", px = 71, py = 95, prefix_config = { key = false } }
-SMODS.Atlas { key = "Voucher", path = "Vouchers.png", px = 71, py = 95, prefix_config = { key = false } }
-SMODS.Atlas{key = "Planet", path = "Tarots.png", px = 71, py = 95, prefix_config = { key = false } }
-SMODS.Atlas{key = "Consumeable", path = "Tarots.png", px = 71, py = 95, prefix_config = { key = false } }
-SMODS.Atlas{key = "centers", path = "Enhancers.png", px = 71, py = 95, prefix_config = { key = false } }
+SMODS.Atlas { key = "Voucher", path = "Vouchers.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "cards_1", path = "8BitDeck.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "cards_2", path = "8BitDeck_opt2.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "balatro", path = "balatro.png", px = 333, py = 216, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "chips", path = "chips.png", px = 29, py = 29, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "centers", path = "Enhancers.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "stickers", path = "stickers.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas { key = "Tarot", path = "Tarots.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas { key = "Spectral", path = "Tarots.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas { key = "Joker", path = "Jokers.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "Planet", path = "Tarots.png", px = 71, py = 95, prefix_config = { key = false } }:register()
+SMODS.Atlas{key = "Booster", path = "boosters.png", px = 71, py = 95, prefix_config = { key = false } }:register()
 
 SMODS.Atlas {
     key = "modicon",
     path = "misc/modIcon.png",
     px = 32,
     py = 32
-}
+}:register()
 
 SMODS.Language({
     key = "aga",
