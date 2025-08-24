@@ -1,14 +1,14 @@
 {
 	"id": "pakito_aga",
-	"name": "Aga Texture Pack",
+	"name": "Bagatro Texture Pack",
 	"author": ["Cult of Aga Team"],
 	"description": ":aga:",
 	"prefix": "pakito_aga",
 	"main_file": "main.lua",
 	"badge_colour": "DDDD22",
 	"badge_text_colour": "0C0C0C",
-	"display_name": ":aga:",
-	"version": "1.0.1",
+	"display_name": "Bagatro Texture Pack",
+	"version": "1.0.3",
 	"dependencies": [
 		"Steamodded (>=1.*~BETA)",
 		"Lovely (>=0.6)",
