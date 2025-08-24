@@ -4,7 +4,14 @@ SMODS.Atlas{
     px = 71,
     py = 95,
 
+SMODS.Atlas {
+    key = "modicon",
+    path = "misc/modIcon.png",
+    px = 32,
+    py = 32
+}:register(),
 SMODS.Sound{
+
     key = 'Bo87',
     path = 'Bo87.ogg'
 }
@@ -14,8 +21,8 @@ SMODS.Sound{
  --JOKERS--
 
 
--- Markilier x87 mult --
-SMODS.Joker{
+
+SMODS.Joker{-- Markilier --
     key = 'Markiplier',
     loc_txt = {
         name = {
@@ -49,8 +56,8 @@ SMODS.Joker{
         end
     end
 }
--- :aga: --
-SMODS.Joker{
+
+SMODS.Joker{-- :aga: --
     key = 'aga',
     loc_txt = {
         name = 'Aga',
@@ -77,6 +84,7 @@ SMODS.Joker{
 
     }},
     rarity = 4,
+    soul_pos = {x=1,y=1},
     atlas = 'Jokers',
     pos = {x = 1, y = 0},
     loc_vars = function (self, info_queue, center)
@@ -104,8 +112,8 @@ end,
     }
 }
 
---test--
-SMODS.Joker{
+
+SMODS.Joker{ -- placeholder--
     key = 'test',
     loc_txt = {
         name = 'test',
@@ -116,24 +124,35 @@ SMODS.Joker{
     atlas = 'Jokers',
     pos = {x=0, y=1}
 }
--- Mitagasis --
-SMODS.Joker {
+
+SMODS.Joker { -- Mitagasis --
     key = 'mitagasis',
     loc_txt = {
         name = 'Mitagasis',
         text = {
-            'Sell this card to create a random jagaker',
-            'Duplicates at the end of round'
+            'Sell this card to create #1# random jagaker',
+            'Increases by #2# at the end of round'
         }
     },
+    config = {extra = {
+        mitagasiscounter = 1,
+        mitagasiscounteradd = 1
+    }},
+    loc_vars = function (self, info_queue, center)
+        return{vars ={center.ability.extra.mitagasiscounter, center.ability.extra.mitagasiscounteradd}}
+    end,
     atlas = 'Jokers',
-    pos = {x=1,y=1},
+    pos = {x=2,y=0},
     rarity = 2,
     calculate = function (self, card, context)
-        if context.setting_blind then 
-            local card = create_card('Joker', G.jokers, nil, nil, nil, nil, 'aga_mitagasis')
-            card:add_to_deck()
-            G.jokers:emplace(card)
+        if context.after then
+            message = 'Upgraded!'
+            card.ability.extra.mitagasiscounter = card.ability.extra.mitagasiscounter + card.ability.extra.mitagasiscounteradd
+        end
+        if context.selling_self then
+            for i = card.ability.extra.mitagasiscounter do
+                add_card('Joker',G.jokers,nil,)
+            end
         end
     end
 }
