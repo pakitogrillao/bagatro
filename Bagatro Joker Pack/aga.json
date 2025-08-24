@@ -1,14 +1,14 @@
 {
-    "id": "Bagatro Joker Pack",
+    "id": "aga",
     "name": "Bagatro Joker Pack",
     "display_name": "Bagatro Joker Pack",
-    "author": ["Cult of aga team"],
+    "author": ["Cult of Aga team"],
     "description": ":aga:",
     "prefix": "aga",
     "main_file": "main.lua",
     "priority": 0,
     "badge_colour": "eed559",
     "badge_text_colour": "fffffff",
-    "version": "0.0.0.1",
+    "version": "1.0.3",
     "dependencies": []
 }

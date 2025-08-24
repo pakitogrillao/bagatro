@@ -127,6 +127,7 @@ SMODS.Joker{ -- placeholder--
 
 SMODS.Joker { -- Mitagasis --
     key = 'mitagasis',
+    name = 'aga-mitagasis',
     loc_txt = {
         name = 'Mitagasis',
         text = {
@@ -135,11 +136,16 @@ SMODS.Joker { -- Mitagasis --
         }
     },
     config = {extra = {
-        mitagasiscounter = 1,
-        mitagasiscounteradd = 1
-    }},
+        counter = 1,
+        counter_mod = 1
+    },
+    immutable = { max_amount = 50 }
+    },
     loc_vars = function (self, info_queue, center)
-        return{vars ={center.ability.extra.mitagasiscounter, center.ability.extra.mitagasiscounteradd}}
+        return{vars =
+        {math.max(1, center.ability.extra.counter_mod), 
+        math.min(center.ability.immutable.max_amount, math.floor(center.ability.extra.counter)),
+        (center.ability.extra.counter > 1 and "Agas") or "Aga"}}
     end,
     atlas = 'Jokers',
     pos = {x=2,y=0},
@@ -147,11 +153,13 @@ SMODS.Joker { -- Mitagasis --
     calculate = function (self, card, context)
         if context.after then
             message = 'Upgraded!'
-            card.ability.extra.mitagasiscounter = card.ability.extra.mitagasiscounter + card.ability.extra.mitagasiscounteradd
+            card.ability.extra.counter = card.ability.extra.counter + card.ability.extra.counter_mod
         end
         if context.selling_self then
-            for i = card.ability.extra.mitagasiscounter do
-                add_card('Joker',G.jokers,nil,)
+            for i = 1, math.min(card.ability.immutable.max_amount, math.floor(card.ability.extra.counter)) do
+                local c = copy_card(card)
+                c:add_to_deck()
+                G.jokers:emplace(c)
             end
         end
     end
