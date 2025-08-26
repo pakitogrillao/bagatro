@@ -10,6 +10,15 @@ SMODS.Atlas {
     px = 32,
     py = 32
 }:register(),
+
+SMODS.ObjectType {
+    key = 'agapool',
+    cards = {
+        ['aga_aga'] = true,
+        ['aga_mitagasis'] = true,
+        ['aga_test'] = true
+    }
+},
 SMODS.Sound{
 
     key = 'Bo87',
@@ -27,7 +36,7 @@ SMODS.Joker{-- Markilier --
     loc_txt = {
         name = {
             '{s:0.60} Hello everyone my name is',
-            ' Multiplier'
+            '{s:1.25, C:mult} Multiplier'
         },
         text = {
             'Was that the bite of',
@@ -38,6 +47,7 @@ SMODS.Joker{-- Markilier --
     atlas ='Jokers',
     pos = {x = 0, y = 0},
     rarity = 3,
+    cost = 7,
     config = { extra = {
         mult = 87
     }},
@@ -58,7 +68,7 @@ SMODS.Joker{-- Markilier --
 }
 
 SMODS.Joker{-- :aga: --
-    key = 'aga',
+    key = 'agalegendary',
     loc_txt = {
         name = 'Aga',
         text = {
@@ -107,9 +117,6 @@ SMODS.Joker{-- :aga: --
 		}
 	end
 end,
-    pools = {
-        ["aga"] = true
-    }
 }
 
 
@@ -127,43 +134,50 @@ SMODS.Joker{ -- placeholder--
 
 SMODS.Joker { -- Mitagasis --
     key = 'mitagasis',
-    name = 'aga-mitagasis',
     loc_txt = {
         name = 'Mitagasis',
         text = {
-            'Sell this card to create #1# random jagaker',
-            'Increases by #2# at the end of round'
+            '{X:chips,C:white} X#1# {} Chips for each other',
+            'Mitagasis you own. (Currently {X:chips,C:white} X#2#)',
+            'Duplicates itself at the end of round.'
         }
     },
+
     config = {extra = {
-        counter = 1,
-        counter_mod = 1
+        xchips_per = 1,
+        xchips = 0,
+        numberofmitagasis = #SMODS.find_card('j_aga_mitagasis')
     },
-    immutable = { max_amount = 50 }
+    immutable = { max_amount = 75 }
     },
     loc_vars = function (self, info_queue, center)
-        return{vars =
-        {math.max(1, center.ability.extra.counter_mod), 
-        math.min(center.ability.immutable.max_amount, math.floor(center.ability.extra.counter)),
-        (center.ability.extra.counter > 1 and "Agas") or "Aga"}}
+        return{vars = {center.ability.extra.xchips_per, center.ability.extra.xchips_per * center.ability.extra.numberofmitagasis}}       
     end,
     atlas = 'Jokers',
     pos = {x=2,y=0},
     rarity = 2,
     calculate = function (self, card, context)
-        if context.after then
-            message = 'Upgraded!'
-            card.ability.extra.counter = card.ability.extra.counter + card.ability.extra.counter_mod
+        if context.joker_main then
+            return {
+                xchips = card.ability.extra.xchips + (card.ability.extra.xchips_per * #SMODS.find_card('j_aga_mitagasis'))
+            }
         end
-        if context.selling_self then
-            for i = 1, math.min(card.ability.immutable.max_amount, math.floor(card.ability.extra.counter)) do
-                local c = copy_card(card)
-                c:add_to_deck()
-                G.jokers:emplace(c)
-            end
+        if context.end_of_round and context.cardarea == G.jokers then
+            G.E_MANAGER:add_event(Event({
+                func = function ()
+                    local c = copy_card(card)
+                    c:add_to_deck()
+                    G.jokers:emplace(c)
+                    return true
+                end,
+            }))
+            return {
+                message = ('It spreads.'),
+            }
         end
     end
 }
+
 
 --BLINDS BLINDS BLINDS--
 --BLINDS BLINDS-- 
