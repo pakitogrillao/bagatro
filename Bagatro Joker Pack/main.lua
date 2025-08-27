@@ -148,7 +148,6 @@ SMODS.Joker { -- Mitagasis --
         xchips = 1,
         numberofmitagasis = #SMODS.find_card('j_aga_mitagasis')
     },
-    immutable = { max_amount = 75 },
     },
     loc_vars = function (self, info_queue, center)
         return{vars = {center.ability.extra.xchips_per, center.ability.extra.xchips}}       
@@ -175,6 +174,32 @@ SMODS.Joker { -- Mitagasis --
             return {
                 message = ('It spreads.'),
             }
+        end
+    end
+}
+
+SMODS.Joker { -- agan --
+    key = 'agan',
+    loc_txt = {
+        name = 'Agan',
+        text = {
+            'When sold, destroys all jokers',
+            'and wins the current blind.'
+        }
+    },
+    calculate = function (self, card, context)
+        if context.selling_card then
+            for i = #G.jokers.cards, 1, -1 do
+                local j = G.jokers.cards[i]
+                if j ~= card then
+                    j:start_dissolve()
+                end
+            end
+            if G.GAME and G.GAME.blind then
+                G.GAME.blind.chips = 0
+                G.STATE = G.STATES.ROUND_EVAL
+                end_round()
+            end
         end
     end
 }
