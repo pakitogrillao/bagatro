@@ -185,8 +185,11 @@ SMODS.Joker { -- agan --
         text = {
             'When sold, destroys all jokers',
             'and wins the current blind.'
-        }
+        },
+        
     },
+    atlas = 'Jokers',
+    pos = {x= 2, y = 1},
     calculate = function (self, card, context)
         if context.selling_card then
             for i = #G.jokers.cards, 1, -1 do
@@ -201,6 +204,55 @@ SMODS.Joker { -- agan --
                 end_round()
             end
         end
+    end
+}
+
+SMODS.Joker { -- secuestraga --
+    key = 'secuestraga',
+    loc_txt = {
+        name = 'Secuestraga',
+        text = {
+            'Destroys a random joker every round',
+            'Gives {X:money,C:white} +3$ {} at end of round for every joker destroyed',
+            '(Currently {X:money,C:white} +#1#$)'
+        }
+    },
+    atlas = 'Jokers',
+    pos = {x=3,y=0},
+    config = {extra = {
+        dollars = 2,
+        dpj = 3,
+        destroyed_jokers = 0
+    }},
+    loc_vars = function (self, info_queue, card)
+        return {vars = {card.ability.extra.dollars}}
+    end,
+    calculate = function (self, card, context)
+        card.ability.extra.dollars = 2 + card.ability.extra.destroyed_jokers * card.ability.extra.dpj
+        if context.setting_blind then
+            local destructible_jokers = {}
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] ~= card and not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+                    destructible_jokers[#destructible_jokers+1] = 
+                        G.jokers.cards[i]
+                end
+            end
+            local joker_to_destroy = pseudorandom_element(destructible_jokers, 'j_aga_secuestraga')
+            if joker_to_destroy then
+                joker_to_destroy.getting_sliced = true
+                G.E_MANAGER:add_event(Event({
+                    func = function ()
+                        (context.blueprint_card or card):juice_up(0.8,0.8)
+                        joker_to_destroy:start_dissolve({ G.C.RED}, nil, 1.6)
+                        card.ability.extra.destroyed_jokers = card.ability.extra.destroyed_jokers + 1
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+    calc_dollar_bonus = function (self, card)
+        return card.ability.extra.dollars
     end
 }
 
