@@ -144,19 +144,20 @@ SMODS.Joker { -- Mitagasis --
     },
 
     config = {extra = {
-        xchips_per = 1,
-        xchips = 0,
+        xchips_per = 0.1,
+        xchips = 1,
         numberofmitagasis = #SMODS.find_card('j_aga_mitagasis')
     },
-    immutable = { max_amount = 75 }
+    immutable = { max_amount = 75 },
     },
     loc_vars = function (self, info_queue, center)
-        return{vars = {center.ability.extra.xchips_per, center.ability.extra.xchips_per * center.ability.extra.numberofmitagasis}}       
+        return{vars = {center.ability.extra.xchips_per, center.ability.extra.xchips}}       
     end,
     atlas = 'Jokers',
     pos = {x=2,y=0},
     rarity = 2,
     calculate = function (self, card, context)
+        card.ability.extra.xchips = 1 + card.ability.extra.xchips_per * #SMODS.find_card('j_aga_mitagasis')
         if context.joker_main then
             return {
                 xchips = card.ability.extra.xchips + (card.ability.extra.xchips_per * #SMODS.find_card('j_aga_mitagasis'))
